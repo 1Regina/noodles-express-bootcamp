@@ -49,7 +49,43 @@ const getYieldPortion = (request, response) =>{
   })
 }
 
+
 app.get('/recipe/:index', whenIncomingResIndex)
 app.get(`/yield/:index`, getYieldPortion)
 
+// with EJS
+const whenIncomingRequest = (req, res) => {
+  console.log('request  came in', req.body);
+
+  read('data.json', (err, dataObj) => {
+    if (err) {
+      console.log('read error', err);
+      response.send('ERROR');
+    } else {
+      const { recipes } = dataObj; // extract the array value with recipes key
+      res.render('index', { recipes });
+    }
+  });
+};
+app.get('/', whenIncomingRequest);
+
+const whenIncomingRequestIndex = (req, res) => {
+  console.log('request came in ');
+
+  read('data.json', (error, dataObj) => {
+    if (error) {
+      console.log('read error', error);
+    }
+
+    const { index } = req.params;
+
+    const recipe = dataObj.recipes[index];
+    // console.log(recipe);
+
+    res.render('recipe', { recipe });
+  });
+};
+
+
+app.get('/recipes/:index', whenIncomingRequestIndex);
 app.listen(port)
