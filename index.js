@@ -3,6 +3,10 @@ import {add, read} from './jsonFileStorage.js';
 
 const app = express();
 app.use(express.static('public'));
+
+// Set view engine
+app.set('view engine', 'ejs');
+
 // Configure Express to parse request body data into request.body
 app.use(express.urlencoded({ extended: false }));
 
